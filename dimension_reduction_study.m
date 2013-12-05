@@ -100,8 +100,8 @@ if n==1
     axis square
     xlim([lbnd ubnd]);
     legend('test','GP mean','train','Location','NorthWest');
-    xlabel('$y$','Interpreter','latex','FontSize',18);
-    ylabel('$f$','Interpreter','latex','FontSize',18);
+    xlabel('y','Interpreter','tex','FontSize',18);
+    ylabel('f','Interpreter','tex','FontSize',18);
     fill([Yte;flipud(Yte)],...
         [gp_mean_asm_yte+2*sqrt(gp_var_asm_yte); flipud(gp_mean_asm_yte-2*sqrt(gp_var_asm_yte))],...
         'k','EdgeColor','k','FaceAlpha',0.1,'EdgeAlpha',0.3);
@@ -122,9 +122,9 @@ elseif n==2
     set(gca,'FontSize',14);
     axis square; grid on; view(-37.5-120,10);
     xlim([lbnd ubnd]); ylim([lbnd ubnd]);
-    xlabel('$y_1$','Interpreter','latex','FontSize',18);
-    ylabel('$y_2$','Interpreter','latex','FontSize',18);
-    zlabel('$f$','Interpreter','latex','FontSize',18);
+    xlabel('y_1','Interpreter','tex','FontSize',18);
+    ylabel('y_2','Interpreter','tex','FontSize',18);
+    zlabel('f','Interpreter','tex','FontSize',18);
     %surf(Y1,Y2,reshape(gp_mean_asm_yte+2*sqrt(gp_var_asm_yte),101,101),...
     %    'EdgeColor','None','FaceAlpha',0.1);
     %surf(Y1,Y2,reshape(gp_mean_asm_yte-2*sqrt(gp_var_asm_yte),101,101),...
@@ -197,8 +197,8 @@ if n==1
     axis square
     xlim([lbnd ubnd]);
     legend('test','GP mean','train','Location','NorthWest');
-    xlabel('$y$','Interpreter','latex','FontSize',18);
-    ylabel('$f$','Interpreter','latex','FontSize',18);
+    xlabel(sprintf('x_%d',ind(1)),'Interpreter','tex','FontSize',18);
+    ylabel('f','Interpreter','tex','FontSize',18);
     fill([Yte;flipud(Yte)],...
         [gp_mean_sens_yte+2*sqrt(gp_var_sens_yte); flipud(gp_mean_sens_yte-2*sqrt(gp_var_sens_yte))],...
         'k','EdgeColor','k','FaceAlpha',0.1,'EdgeAlpha',0.3);
@@ -219,9 +219,9 @@ elseif n==2
     set(gca,'FontSize',14);
     axis square; grid on; view(-37.5-120,10);
     xlim([lbnd ubnd]); ylim([lbnd ubnd]);
-    xlabel('$y_1$','Interpreter','latex','FontSize',18);
-    ylabel('$y_2$','Interpreter','latex','FontSize',18);
-    zlabel('$f$','Interpreter','latex','FontSize',18);
+    xlabel(sprintf('x_%d',ind(1)),'Interpreter','tex','FontSize',18);
+    ylabel(sprintf('x_%d',ind(2)),'Interpreter','tex','FontSize',18);
+    zlabel('f','Interpreter','tex','FontSize',18);
     %surf(Y1,Y2,reshape(gp_mean_kl_yte+2*sqrt(gp_var_kl_yte),101,101),...
     %    'EdgeColor','None','FaceAlpha',0.1);
     %surf(Y1,Y2,reshape(gp_mean_kl_yte-2*sqrt(gp_var_kl_yte),101,101),...
