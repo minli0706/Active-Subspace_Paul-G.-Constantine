@@ -20,7 +20,7 @@ clear all; close all
 pde_data = get_pde_data();
 
 % Get KL bases
-corr_length = 0.01; % correlation length for PDE random coefficients
+corr_length = 1; % correlation length for PDE random coefficients
 
 % Load the initial random study
 T=load('testing0.mat'); X = T.X; clear T;
