@@ -2,7 +2,7 @@ function data = get_pde_data()
 % Returns PDE geometry and mesh specs in a struct
 
 % load geometry and boundary conditions
-bg=load('bg.mat'); b=bg.b; g=bg.g; clear bg;
+bg=load('pde/bg.mat'); b=bg.b; g=bg.g; clear bg;
 data.g = g; data.b = b;
 
 % Square physical domain.

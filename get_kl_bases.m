@@ -4,7 +4,7 @@ function [U,sv] = get_kl_bases(corr_length,m,pde_data,filename)
 % m: truncation of KL
 % pde_data: mesh for PDE
 
-filename = sprintf('kl_%s',filename);
+filename = sprintf('kl/%s',filename);
 
 % Random field model for diffusion coefficients.
 if exist(filename,'file')

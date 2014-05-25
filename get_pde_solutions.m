@@ -1,8 +1,8 @@
 function [f,G] = get_pde_solutions(X,U,pde_data,filename)
 
-if exist(filename,'file')
+if exist(sprintf('pde/%s',filename),'file') && ~isempty(filename)
     % If the PDEs have been solved, use 'em.
-    load(filename);
+    load(sprintf('pde/%s',filename));
 else
     
     p = pde_data.p;
@@ -51,7 +51,7 @@ else
 
     end
     
-    if ~isempty(filename), save(filename,'G','f','psi'); end
+    if ~isempty(filename), save(sprintf('pde/%s',filename),'G','f','psi'); end
 
 end
 

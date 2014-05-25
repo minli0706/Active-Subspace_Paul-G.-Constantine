@@ -9,10 +9,9 @@ if nargin==3
 
     cov = {@covSEiso}; sf = 1; ell = 2;
     hyp0.cov  = log([ell;sf]);
-    mean = {@meanSum,{{@meanPoly,2},@meanConst}};
     if n==1
         mean = {@meanSum,{{@meanPoly,2},@meanConst}};
-        hyp0.mean = [0; 0; 0];
+        hyp0.mean = [0; 0; 0]; % the minimization is very sensitive to this
     elseif n==2
         mean = {@meanSum,{{@meanPoly,2},@meanConst}};
         hyp0.mean = [0; 0; 0; 0; 0];
@@ -104,3 +103,62 @@ else
     gstar = fstar + R'*beta;
     wstar = vstar + diag(R'*(A\R));
 end
+
+end
+
+function C = exp2_cov(X,Y,sigma,ell)
+
+m=size(X,1); n=size(Y,1);
+
+if isscalar(ell), ell=ell*ones(size(X,2),1); end
+c=-0.5./ell; c=c(:);
+C=zeros(m,n);
+for i=1:n
+    point=Y(i,:);
+    XX=bsxfun(@minus,X,point);
+    C(:,i)=sigma.*exp((XX.^2)*c);
+end
+end
+
+function negloglik = neg_log_likelihood(X,y,lambda,gamma)
+
+[M,n] = size(X);
+sigma = gamma*sum(lambda);
+sigma_n = gamma*sum(lambda(n+1:end));
+ell = sigma./lambda(1:n);
+
+% covariance matrix of observations
+Ky = exp2_cov(X,X,sigma,ell) + sigma_n*eye(M);
+L = chol(Ky,'lower');
+
+% polynomial bases
+H = poly2_bases(X);
+A = H'*(Ky\H);
+B = chol(A,'lower');
+
+% negative log likelihood
+z = Ky\y;
+negloglik = 0.5*(y'*(Ky\y)) ...
+    - 0.5*((H'*z)'*(A\(H'*z))) ...
+    + 0.5*sum(log(diag(L))) ...
+    + 0.5*sum(log(diag(B))) ...
+    + 0.5*(M-size(H,2))*log(2*pi);
+
+end
+
+function H = poly2_bases(X)
+
+[M,d] = size(X);
+
+% build polynomial constraints
+I=index_set('full',2,d); 
+I = flipud(I);
+nn=size(I,2);
+H=zeros(M,nn);
+for i=1:nn
+    H(:,i)=prod(bsxfun(@power,X,I(:,i)'),2);
+end
+
+end
+
+
