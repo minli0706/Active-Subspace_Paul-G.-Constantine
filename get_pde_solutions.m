@@ -51,7 +51,7 @@ else
 
     end
     
-    if ~isempty(filename), save(sprintf('pde/%s',filename),'G','f','psi'); end
+    if ~isempty(filename), save(sprintf('pde/%s',filename),'G','f','psi','X'); end
 
 end
 

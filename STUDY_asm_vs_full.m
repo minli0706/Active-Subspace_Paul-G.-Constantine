@@ -11,7 +11,7 @@ clear all; close all
 pde_data = get_pde_data();
 
 % Get KL bases
-corr_length = 0.01; % correlation length for PDE random coefficients
+corr_length = 1; % correlation length for PDE random coefficients
 
 % Load the initial random study
 T=load('gp/testing0.mat'); X0 = T.X; clear T;
@@ -22,8 +22,12 @@ T=load('gp/testing0.mat'); X0 = T.X; clear T;
 % Get the PDE solutions and gradients
 if corr_length == 1
     filename='long_corr.mat';
+    testfilename='test_long_corr.mat';
+    trainfilename='train_long_corr.mat';
 elseif corr_length == 0.01
     filename='short_corr.mat';
+    testfilename='test_short_corr.mat';
+    trainfilename='train_short_corr.mat';
 else
     filename=sprintf('%0.10d.mat',randi(1e9));
 end
@@ -32,16 +36,16 @@ end
 
 %%
 T=load('gp/test_full.mat'); Xtest = T.X; clear T;
-ftest = get_pde_solutions(Xtest,U,pde_data,'test_full.mat');
+ftest = get_pde_solutions(Xtest,U,pde_data,testfilename);
 T=load('gp/train_full.mat'); Xtrain = T.X; clear T;
-ftrain = get_pde_solutions(Xtrain,U,pde_data,'train_full.mat');
+ftrain = get_pde_solutions(Xtrain,U,pde_data,trainfilename);
 [gp_mean_full,gp_var_full,parms] = gpml_regression(Xtrain,ftrain,Xtest);
 errs_full = abs(gp_mean_full-ftest)./abs(ftest);
 fprintf('Error: %6.4e\n',mean(errs_full));
 
 %% Dimension of subspace
 % Choose n to be 1 or 2
-n = 2;
+n = 1;
 if n~=1 && n~=2, error('Error: n must be 1 or 2'); end
 
 % Domain and design on the subspace
@@ -105,6 +109,39 @@ else
     end
 end
 
+%%
+% Plot comparison of errors plots.
+close all;
+figure(2)
+plot(ftest,gp_mean_full,'bx',...
+    ftest,gp_mean_asm,'ro',...
+    'MarkerSize',12,'LineWidth',2);
+axis square; grid on;
+set(gca,'FontSize',14);
+xlabel('True');
+ylabel('Kriging');
+xlim([min(ftest) max(ftest)]);
+ylim([min(ftest) max(ftest)]);
+legend('Full','ASM','Location','NorthWest');
+if corr_length==0.01
+    if n==1
+        print(sprintf('figs/full_err_vsmall_corr_1d_comp'),'-depsc2','-r300');
+    else
+        print(sprintf('figs/full_err_vsmall_corr_2d_comp'),'-depsc2','-r300');
+    end
+elseif corr_length==1
+    if n==1
+        print(sprintf('figs/full_err_large_corr_1d_comp'),'-depsc2','-r300');
+    else
+        print(sprintf('figs/full_err_large_corr_2d_comp'),'-depsc2','-r300');
+    end
+else 
+    if n==1
+        print(sprintf('figs/full_err_%0.4d_corr_1d_comp',randi(1000,1)),'-depsc2','-r300');
+    else
+        print(sprintf('figs/full_err_%0.4d_corr_2d_comp',randi(1000,1)),'-depsc2','-r300');
+    end
+end
 
 
 
