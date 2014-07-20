@@ -32,7 +32,7 @@ end
 
 %% Dimension of subspace
 % Choose n to be 1 or 2
-n = 2;
+n = 1;
 if n~=1 && n~=2, error('Error: n must be 1 or 2'); end
 
 % Domain and design on the subspace
@@ -256,6 +256,37 @@ else
     end
 end
 
-
+%%
+% Plot comparison of errors plots.
+figure(2)
+plot(f,gp_mean_sens(1:M),'bx',...
+    f,gp_mean_asm,'ro',...
+    'MarkerSize',12,'LineWidth',2);
+axis square; grid on;
+set(gca,'FontSize',14);
+xlabel('True');
+ylabel('Kriging');
+xlim([min(f) max(f)]);
+ylim([min(f) max(f)]);
+legend('Full','ASM','Location','NorthWest');
+if corr_length==0.01
+    if n==1
+        print(sprintf('figs/err_vsmall_corr_1d_comp'),'-depsc2','-r300');
+    else
+        print(sprintf('figs/err_vsmall_corr_2d_comp'),'-depsc2','-r300');
+    end
+elseif corr_length==1
+    if n==1
+        print(sprintf('figs/err_large_corr_1d_comp'),'-depsc2','-r300');
+    else
+        print(sprintf('figs/err_large_corr_2d_comp'),'-depsc2','-r300');
+    end
+else 
+    if n==1
+        print(sprintf('figs/err_%0.4d_corr_1d_comp',randi(1000,1)),'-depsc2','-r300');
+    else
+        print(sprintf('figs/err_%0.4d_corr_2d_comp',randi(1000,1)),'-depsc2','-r300');
+    end
+end
 
 

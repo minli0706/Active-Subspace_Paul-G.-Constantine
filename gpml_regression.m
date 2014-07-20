@@ -22,7 +22,7 @@ if nargin==3
 
     Ncg = 500;
     lik = 'likGauss';
-    hyp0.lik  = log(0.2);
+    hyp0.lik  = log(1);
     inf = 'infExact';
 
     hyp = minimize(hyp0,'gp', -Ncg, inf, mean, cov, lik, X, y);

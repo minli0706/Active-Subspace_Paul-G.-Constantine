@@ -111,7 +111,6 @@ end
 
 %%
 % Plot comparison of errors plots.
-close all;
 figure(2)
 plot(ftest,gp_mean_full,'bx',...
     ftest,gp_mean_asm,'ro',...
